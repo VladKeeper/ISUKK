@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Создать новую накладную</h2>
+    <form method="post">
+        <div class="form-group">
+            <label for="title">Название накладной</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="company">Грузополучатель</label>
+            <input type="text" class="form-control" id="company" name="company" required>
+        </div>
+        <div class="form-group">
+            <label for="date">Дата</label>
+            <input type="date" class="form-control" id="date" name="date" required>
+        </div>
+        <h3>Товарные позиции</h3>
+        <div id="item-container">
+            <div class="form-row item-row">
+                <div class="form-group col-md-1">
+                    <label for="item-number-1">#1</label>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="name_1">Название</label>
+                    <input type="text" class="form-control" id="name_1" name="name_1">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="unit_1">Единица измерения</label>
+                    <input type="text" class="form-control" id="unit_1" name="unit_1">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="quantity_1">Количество</label>
+                    <input type="number" class="form-control" id="quantity_1" name="quantity_1">
+                </div>
+                <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-primary add-item-btn">Добавить</button>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+
+    <script>
+        let itemCount = 1;
+        const itemContainer = document.getElementById('item-container');
+        const addItemBtn = document.querySelector('.add-item-btn');
+
+        addItemBtn.addEventListener('click', () => {
+            itemCount++;
+            const newItemRow = document.createElement('div');
+            newItemRow.classList.add('form-row', 'item-row');
+            newItemRow.innerHTML = `
+                <div class="form-group col-md-1">
+                    <label for="item-number-${itemCount}">#${itemCount}</label>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="name_${itemCount}">Название</label>
+                    <input type="text" class="form-control" id="name_${itemCount}" name="name_${itemCount}">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="unit_${itemCount}">Единица измерения</label>
+                    <input type="text" class="form-control" id="unit_${itemCount}" name="unit_${itemCount}">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="quantity_${itemCount}">Количество</label>
+                    <input type="number" class="form-control" id="quantity_${itemCount}" name="quantity_${itemCount}">
+                </div>
+                <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-danger remove-item-btn">Удалить</button>
+                </div>
+            `;
+            itemContainer.appendChild(newItemRow);
+
+            const removeItemBtns = document.querySelectorAll('.remove-item-btn');
+            removeItemBtns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.item-row').remove();
+                });
+            });
+        });
+    </script>
+{% endblock %}

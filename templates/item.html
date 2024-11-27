@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% block title %} {{ item['title'] }} {% endblock %}</h2>
+    <span class="badge badge-primary">{{ item['company'] }}</span>
+    {% if item['status']=='выдан' %}
+    <span class="badge badge-success"> выдан </span>
+    {% else %}
+    <span class="badge badge-danger"> не выдан </span>
+    {%- endif %}
+    <hr>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Позиция</th>
+                <th scope="col">Единица измерения</th>
+                <th scope="col">Количество</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for position in positions %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ position['name'] }}</td>
+                <td>{{ position['unit'] }}</td>
+                <td>{{ position['quantity'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h5>Добавить товарную позицию</h5>
+    <form method="POST" action="{{ url_for('add_position', item_id=item['id']) }}">
+        <input type="text" name="name" placeholder="Название" required>
+        <input type="text" name="unit" placeholder="Единица измерения" required>
+        <input type="number" name="quantity" placeholder="Количество" required>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+
+    {% if item['status']=='выдан' %}
+        <p><h5>Товары были выданы {{ item['time'] }}</h5></p>
+    {% else %}
+        <p>
+            <form method="POST" action="{{ url_for('item', item_id=item['id']) }}">
+                <button type="submit" class="btn btn-primary btn-sm">Выдать товары по накладной</button>
+            </form>
+        </p>
+    {% endif %}
+
+{% endblock %}
